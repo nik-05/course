@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProgramCard extends StatelessWidget {
-  final String type;
-  final String title;
-  final int lessons;
+  final String category;
+  final String name;
+  final int lesson;
 
   const ProgramCard(
       {Key? key,
-      required this.type,
-      required this.title,
-      required this.lessons})
+      required this.category,
+      required this.name,
+      required this.lesson})
       : super(key: key);
 
   @override
@@ -52,7 +52,7 @@ class ProgramCard extends StatelessWidget {
                   GestureDetector(
                     onTap: () {},
                     child: Text(
-                        type.toUpperCase(),
+                        category.toUpperCase(),
                         style: GoogleFonts.inter(
                           color: Palette.buttonTextColor,
                           fontSize: 12,
@@ -62,7 +62,7 @@ class ProgramCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 15),
                   Text(
-                    title,
+                    name,
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -71,7 +71,7 @@ class ProgramCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 15),
                   Text(
-                    '$lessons lessons',
+                    '$lesson lessons',
                     style: GoogleFonts.inter(
                       fontWeight: FontWeight.w500,
                       fontSize: 12,

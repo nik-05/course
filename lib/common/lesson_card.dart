@@ -1,17 +1,23 @@
-import 'package:course/common/custom_button.dart';
 import 'package:course/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class LessonCard extends StatelessWidget {
-  final String type;
-  final String title;
+  final String createdAt;
+  final String category;
+  final String name;
+  final int duration;
+  final bool locked;
 
-  const LessonCard(
-      {Key? key,
-        required this.type,
-        required this.title,})
-      : super(key: key);
+  const LessonCard({
+    Key? key,
+    required this.createdAt,
+    required this.category,
+    required this.name,
+    required this.duration,
+    required this.locked,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +36,7 @@ class LessonCard extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             ClipRRect(
               borderRadius: const BorderRadius.only(
@@ -43,46 +50,49 @@ class LessonCard extends StatelessWidget {
                 height: 140,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child: Text(
-                      type.toUpperCase(),
-                      style: GoogleFonts.inter(
-                        color: Palette.buttonTextColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  Text(
-                    title,
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '13 Feb, Sunday',
+            SizedBox(
+              height: 140,
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {},
+                      child: Text(
+                        category.toUpperCase(),
                         style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w500,
+                          color: Palette.buttonTextColor,
                           fontSize: 12,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
-                      const Icon(Icons.lock),
-                    ],
-                  ),
-                ],
+                    ),
+                    Text(
+                      name,
+                      style: GoogleFonts.inter(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          getDate(createdAt.substring(0, 10)),
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                          ),
+                        ),
+                        if(locked) const Icon(Icons.lock),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -90,4 +100,10 @@ class LessonCard extends StatelessWidget {
       ),
     );
   }
+}
+String getDate(String dateTime) {
+  DateTime date = DateTime.parse(dateTime);
+  var formatter = DateFormat("d MMM, yyyy");
+  String formattedDate = formatter.format(date);
+  return formattedDate;
 }

@@ -1,3 +1,4 @@
+import 'package:course/api/api.dart';
 import 'package:course/common/custom_button.dart';
 import 'package:course/common/event_card.dart';
 import 'package:course/common/lesson_card.dart';
@@ -6,8 +7,37 @@ import 'package:course/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomeScreen extends StatelessWidget {
+import '../models/lesson_model.dart';
+import '../models/program_model.dart';
+
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<ProgramModel>? programs;
+  List<LessonModel>? lessons;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getPrograms();
+    getLessons();
+    super.initState();
+  }
+
+  void getPrograms() async {
+    programs = await API().getPrograms();
+    setState(() {});
+  }
+
+  void getLessons() async {
+    lessons = await API().getLessons();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,77 +184,68 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 Column(
                   children: [
-                    Container(
-                      color: Colors.white,
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'Programs for you',
-                                  style: GoogleFonts.lora(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    'View all',
-                                    style: GoogleFonts.inter(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                      color: Palette.textSecondaryColor,
-                                    ),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(
-                                      Icons.arrow_right_alt,
-                                      color: Palette.bottomNavigatorUnselected,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: 280,
-                            child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              children: const [
-                                SizedBox(width: 8),
+                    if (programs != null && programs!.isNotEmpty)
+                      Container(
+                        color: Colors.white,
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
                                 Padding(
-                                  padding: EdgeInsets.all(1),
-                                  child: ProgramCard(
-                                    type: 'lifestyle',
-                                    title: 'A complete guide for your new born baby',
-                                    lessons: 16,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Programs for you',
+                                    style: GoogleFonts.lora(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                 ),
-                                SizedBox(width: 16),
-                                ProgramCard(
-                                  type: 'lifestyle',
-                                  title: 'A complete guide for your new born baby',
-                                  lessons: 16,
-                                ),
-                                SizedBox(width: 16),
-                                ProgramCard(
-                                  type: 'lifestyle',
-                                  title: 'A complete guide for your new born baby',
-                                  lessons: 16,
-                                ),
-                                SizedBox(width: 16),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'View all',
+                                      style: GoogleFonts.inter(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        color: Palette.textSecondaryColor,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                        Icons.arrow_right_alt,
+                                        color:
+                                            Palette.bottomNavigatorUnselected,
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
-                          ),
-                        ],
+                            SizedBox(
+                              height: 280,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: programs!.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 8,
+                                      right: 8,
+                                    ),
+                                    child: ProgramCard(
+                                        category: programs![index].category,
+                                        name: programs![index].name,
+                                        lesson: programs![index].lesson),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
                     Container(
                       color: Colors.white,
                       child: Column(
@@ -271,17 +292,20 @@ class HomeScreen extends StatelessWidget {
                                 SizedBox(width: 8),
                                 EventCard(
                                   type: 'lifestyle',
-                                  title: 'A complete guide for your new born baby',
+                                  title:
+                                      'A complete guide for your new born baby',
                                 ),
                                 SizedBox(width: 16),
                                 EventCard(
                                   type: 'lifestyle',
-                                  title: 'A complete guide for your new born baby',
+                                  title:
+                                      'A complete guide for your new born baby',
                                 ),
                                 SizedBox(width: 16),
                                 EventCard(
                                   type: 'lifestyle',
-                                  title: 'A complete guide for your new born baby',
+                                  title:
+                                      'A complete guide for your new born baby',
                                 ),
                                 SizedBox(width: 16),
                               ],
@@ -290,71 +314,71 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Container(
-                      color: Colors.white,
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'Lessons for you',
-                                  style: GoogleFonts.lora(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    'View all',
-                                    style: GoogleFonts.inter(
-                                      fontSize: 12,
+                    if (lessons != null && lessons!.isNotEmpty)
+                      Container(
+                        color: Colors.white,
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Lessons for you',
+                                    style: GoogleFonts.lora(
+                                      fontSize: 18,
                                       fontWeight: FontWeight.w500,
-                                      color: Palette.textSecondaryColor,
                                     ),
                                   ),
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(
-                                      Icons.arrow_right_alt,
-                                      color: Palette.bottomNavigatorUnselected,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'View all',
+                                      style: GoogleFonts.inter(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        color: Palette.textSecondaryColor,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: 280,
-                            child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              children: const [
-                                SizedBox(width: 8),
-                                LessonCard(
-                                  type: 'lifestyle',
-                                  title: 'A complete guide for your new born baby',
-                                ),
-                                SizedBox(width: 16),
-                                LessonCard(
-                                  type: 'lifestyle',
-                                  title: 'A complete guide for your new born baby',
-                                ),
-                                SizedBox(width: 16),
-                                LessonCard(
-                                  type: 'lifestyle',
-                                  title: 'A complete guide for your new born baby',
-                                ),
-                                SizedBox(width: 16),
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                        Icons.arrow_right_alt,
+                                        color:
+                                            Palette.bottomNavigatorUnselected,
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
-                          )
-                        ],
+                            SizedBox(
+                              height: 280,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: lessons!.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 8,
+                                      right: 8,
+                                    ),
+                                    child: LessonCard(
+                                      createdAt: lessons![index].createdAt,
+                                      category: lessons![index].category,
+                                      name: lessons![index].name,
+                                      duration: lessons![index].duration,
+                                      locked: lessons![index].locked,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ],
@@ -362,7 +386,7 @@ class HomeScreen extends StatelessWidget {
             Container(
               height: 30,
               color: Colors.white,
-            )
+            ),
           ],
         ),
       ),
